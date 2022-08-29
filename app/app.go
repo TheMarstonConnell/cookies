@@ -166,6 +166,8 @@ var (
 		stakingtypes.NotBondedPoolName: {authtypes.Burner, authtypes.Staking},
 		govtypes.ModuleName:            {authtypes.Burner},
 		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
+		cookiesmoduletypes.ModuleName:  {authtypes.Minter, authtypes.Burner},
+
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 )
@@ -381,6 +383,7 @@ func New(
 		keys[cookiesmoduletypes.StoreKey],
 		keys[cookiesmoduletypes.MemStoreKey],
 		app.GetSubspace(cookiesmoduletypes.ModuleName),
+		app.BankKeeper,
 	)
 	cookiesModule := cookiesmodule.NewAppModule(appCodec, app.CookiesKeeper, app.AccountKeeper, app.BankKeeper)
 

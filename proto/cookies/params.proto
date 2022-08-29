@@ -9,4 +9,5 @@ option go_package = "github.com/TheMarstonConnell/cookies/x/cookies/types";
 message Params {
   option (gogoproto.goproto_stringer) = false;
   
+  string cookie_denom = 1; 
 }

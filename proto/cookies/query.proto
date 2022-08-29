@@ -5,6 +5,7 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "cookies/params.proto";
+import "cookies/buildings.proto";
 // this line is used by starport scaffolding # 1
 
 option go_package = "github.com/TheMarstonConnell/cookies/x/cookies/types";
@@ -15,7 +16,22 @@ service Query {
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/TheMarstonConnell/cookies/cookies/params";
   }
-  // this line is used by starport scaffolding # 2
+  // Queries a Buildings by index.
+	rpc Buildings(QueryGetBuildingsRequest) returns (QueryGetBuildingsResponse) {
+		option (google.api.http).get = "/TheMarstonConnell/cookies/cookies/buildings/{uid}";
+	}
+
+	// Queries a list of Buildings items.
+	rpc BuildingsAll(QueryAllBuildingsRequest) returns (QueryAllBuildingsResponse) {
+		option (google.api.http).get = "/TheMarstonConnell/cookies/cookies/buildings";
+	}
+
+// Queries a list of GetCost items.
+	rpc GetCost(QueryGetCostRequest) returns (QueryGetCostResponse) {
+		option (google.api.http).get = "/TheMarstonConnell/cookies/cookies/get_cost/{address}/{building}";
+	}
+
+// this line is used by starport scaffolding # 2
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -25,6 +41,33 @@ message QueryParamsRequest {}
 message QueryParamsResponse {
   // params holds all the parameters of this module.
   Params params = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetBuildingsRequest {
+	  string uid = 1;
+
+}
+
+message QueryGetBuildingsResponse {
+	Buildings buildings = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllBuildingsRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllBuildingsResponse {
+	repeated Buildings buildings = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetCostRequest {
+  string address = 1;
+  string building = 2;
+}
+
+message QueryGetCostResponse {
+  int64 cost = 1;
 }
 
 // this line is used by starport scaffolding # 3

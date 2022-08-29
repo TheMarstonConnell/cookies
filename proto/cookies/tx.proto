@@ -7,7 +7,24 @@ option go_package = "github.com/TheMarstonConnell/cookies/x/cookies/types";
 
 // Msg defines the Msg service.
 service Msg {
-    // this line is used by starport scaffolding # proto/tx/rpc
+      rpc Bake(MsgBake) returns (MsgBakeResponse);
+  rpc BuyBuilding(MsgBuyBuilding) returns (MsgBuyBuildingResponse);
+// this line is used by starport scaffolding # proto/tx/rpc
+}
+
+message MsgBake {
+  string creator = 1;
+}
+
+message MsgBakeResponse {
+}
+
+message MsgBuyBuilding {
+  string creator = 1;
+  string building = 2;
+}
+
+message MsgBuyBuildingResponse {
 }
 
 // this line is used by starport scaffolding # proto/tx/message

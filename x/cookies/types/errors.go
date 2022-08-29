@@ -8,5 +8,6 @@ import (
 
 // x/cookies module sentinel errors
 var (
-	ErrSample = sdkerrors.Register(ModuleName, 1100, "sample error")
+	ErrSample  = sdkerrors.Register(ModuleName, 1100, "sample error")
+	ErrNoParse = sdkerrors.Register(ModuleName, 1110, "cannot parse building type")
 )

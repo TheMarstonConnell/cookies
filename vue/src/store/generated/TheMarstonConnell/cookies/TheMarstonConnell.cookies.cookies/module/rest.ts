@@ -9,10 +9,47 @@
  * ---------------------------------------------------------------
  */
 
+export interface CookiesBuildings {
+  uid?: string;
+
+  /** @format int64 */
+  count?: string;
+}
+
+export type CookiesMsgBakeResponse = object;
+
+export type CookiesMsgBuyBuildingResponse = object;
+
 /**
  * Params defines the parameters for the module.
  */
-export type CookiesParams = object;
+export interface CookiesParams {
+  cookie_denom?: string;
+}
+
+export interface CookiesQueryAllBuildingsResponse {
+  buildings?: CookiesBuildings[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
+export interface CookiesQueryGetBuildingsResponse {
+  buildings?: CookiesBuildings;
+}
+
+export interface CookiesQueryGetCostResponse {
+  /** @format int64 */
+  cost?: string;
+}
 
 /**
  * QueryParamsResponse is response type for the Query/Params RPC method.
@@ -31,6 +68,69 @@ export interface RpcStatus {
   code?: number;
   message?: string;
   details?: ProtobufAny[];
+}
+
+/**
+* message SomeRequest {
+         Foo some_parameter = 1;
+         PageRequest pagination = 2;
+ }
+*/
+export interface V1Beta1PageRequest {
+  /**
+   * key is a value returned in PageResponse.next_key to begin
+   * querying the next page most efficiently. Only one of offset or key
+   * should be set.
+   * @format byte
+   */
+  key?: string;
+
+  /**
+   * offset is a numeric offset that can be used when key is unavailable.
+   * It is less efficient than using key. Only one of offset or key should
+   * be set.
+   * @format uint64
+   */
+  offset?: string;
+
+  /**
+   * limit is the total number of results to be returned in the result page.
+   * If left empty it will default to a value to be set by each app.
+   * @format uint64
+   */
+  limit?: string;
+
+  /**
+   * count_total is set to true  to indicate that the result set should include
+   * a count of the total number of items available for pagination in UIs.
+   * count_total is only respected when offset is used. It is ignored when key
+   * is set.
+   */
+  count_total?: boolean;
+
+  /**
+   * reverse is set to true if results are to be returned in the descending order.
+   *
+   * Since: cosmos-sdk 0.43
+   */
+  reverse?: boolean;
+}
+
+/**
+* PageResponse is to be embedded in gRPC response messages where the
+corresponding request message has used PageRequest.
+
+ message SomeResponse {
+         repeated Bar results = 1;
+         PageResponse page = 2;
+ }
+*/
+export interface V1Beta1PageResponse {
+  /** @format byte */
+  next_key?: string;
+
+  /** @format uint64 */
+  total?: string;
 }
 
 export type QueryParamsType = Record<string | number, any>;
@@ -225,10 +325,68 @@ export class HttpClient<SecurityDataType = unknown> {
 }
 
 /**
- * @title cookies/genesis.proto
+ * @title cookies/buildings.proto
  * @version version not set
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryBuildingsAll
+   * @summary Queries a list of Buildings items.
+   * @request GET:/TheMarstonConnell/cookies/cookies/buildings
+   */
+  queryBuildingsAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<CookiesQueryAllBuildingsResponse, RpcStatus>({
+      path: `/TheMarstonConnell/cookies/cookies/buildings`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryBuildings
+   * @summary Queries a Buildings by index.
+   * @request GET:/TheMarstonConnell/cookies/cookies/buildings/{uid}
+   */
+  queryBuildings = (uid: string, params: RequestParams = {}) =>
+    this.request<CookiesQueryGetBuildingsResponse, RpcStatus>({
+      path: `/TheMarstonConnell/cookies/cookies/buildings/${uid}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryGetCost
+   * @summary Queries a list of GetCost items.
+   * @request GET:/TheMarstonConnell/cookies/cookies/get_cost/{address}/{building}
+   */
+  queryGetCost = (address: string, building: string, params: RequestParams = {}) =>
+    this.request<CookiesQueryGetCostResponse, RpcStatus>({
+      path: `/TheMarstonConnell/cookies/cookies/get_cost/${address}/${building}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
   /**
    * No description
    *
