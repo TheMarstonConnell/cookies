@@ -1,0 +1,12 @@
+syntax = "proto3";
+package TheMarstonConnell.cookies.cookies;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/TheMarstonConnell/cookies/x/cookies/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+  
+}
