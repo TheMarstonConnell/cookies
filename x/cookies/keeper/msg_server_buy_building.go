@@ -10,11 +10,12 @@ import (
 func (k msgServer) BuyBuilding(goCtx context.Context, msg *types.MsgBuyBuilding) (*types.MsgBuyBuildingResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// TODO: Handling the message
-	_ = ctx
-
 	building, ok := sdk.NewIntFromString(msg.Building)
 	if !ok {
+		return nil, types.ErrNoParse
+	}
+
+	if building.Int64() > 7 || building.Int64() < 0 {
 		return nil, types.ErrNoParse
 	}
 

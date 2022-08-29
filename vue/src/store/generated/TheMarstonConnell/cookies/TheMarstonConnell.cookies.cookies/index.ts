@@ -228,21 +228,6 @@ export default {
 		},
 		
 		
-		async sendMsgBake({ rootGetters }, { value, fee = [], memo = '' }) {
-			try {
-				const txClient=await initTxClient(rootGetters)
-				const msg = await txClient.msgBake(value)
-				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee, 
-	gas: "200000" }, memo})
-				return result
-			} catch (e) {
-				if (e == MissingWalletError) {
-					throw new Error('TxClient:MsgBake:Init Could not initialize signing client. Wallet is required.')
-				}else{
-					throw new Error('TxClient:MsgBake:Send Could not broadcast Tx: '+ e.message)
-				}
-			}
-		},
 		async sendMsgBuyBuilding({ rootGetters }, { value, fee = [], memo = '' }) {
 			try {
 				const txClient=await initTxClient(rootGetters)
@@ -258,20 +243,22 @@ export default {
 				}
 			}
 		},
-		
-		async MsgBake({ rootGetters }, { value }) {
+		async sendMsgBake({ rootGetters }, { value, fee = [], memo = '' }) {
 			try {
 				const txClient=await initTxClient(rootGetters)
 				const msg = await txClient.msgBake(value)
-				return msg
+				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee, 
+	gas: "200000" }, memo})
+				return result
 			} catch (e) {
 				if (e == MissingWalletError) {
 					throw new Error('TxClient:MsgBake:Init Could not initialize signing client. Wallet is required.')
-				} else{
-					throw new Error('TxClient:MsgBake:Create Could not create message: ' + e.message)
+				}else{
+					throw new Error('TxClient:MsgBake:Send Could not broadcast Tx: '+ e.message)
 				}
 			}
 		},
+		
 		async MsgBuyBuilding({ rootGetters }, { value }) {
 			try {
 				const txClient=await initTxClient(rootGetters)
@@ -282,6 +269,19 @@ export default {
 					throw new Error('TxClient:MsgBuyBuilding:Init Could not initialize signing client. Wallet is required.')
 				} else{
 					throw new Error('TxClient:MsgBuyBuilding:Create Could not create message: ' + e.message)
+				}
+			}
+		},
+		async MsgBake({ rootGetters }, { value }) {
+			try {
+				const txClient=await initTxClient(rootGetters)
+				const msg = await txClient.msgBake(value)
+				return msg
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgBake:Init Could not initialize signing client. Wallet is required.')
+				} else{
+					throw new Error('TxClient:MsgBake:Create Could not create message: ' + e.message)
 				}
 			}
 		},
